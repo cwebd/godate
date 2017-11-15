@@ -67,6 +67,7 @@ var (
 	monthsShort     = []string{"jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"}
 	daysOfWeekShort = []string{"mon", "tue", "wed", "thu", "fri", "sat", "sun"}
 	daysOfWeek      = []string{"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"}
+	dateOrdinals    = []string{"st", "nd", "rd", "th"}
 
 	standardDateFormats = []string{
 		time.RFC1123,
@@ -187,16 +188,24 @@ func ParseInLocation(s string, loc *time.Location) (time.Time, error) {
 // and if successful, returns the timestamp and the layout of the
 // string.
 func ParseAndGetLayout(date string) (time.Time, string, error) {
+
 	if len(strings.TrimSpace(date)) == 0 {
 		return time.Time{}, "", errors.New("Empty string cannot be parsed to date")
 	}
+
 	// Check standard date formats first.
 	for _, f := range standardDateFormats {
 		if t, err := time.Parse(f, date); err == nil {
 			return t, f, nil
 		}
 	}
+
+	// Remove Date Ordinals
+	re := regexp.MustCompile("(?i)([1-9]+)(" + strings.Join(dateOrdinals, "|") + ")")
+	date = re.ReplaceAllString(date, "$1")
+
 	s := strings.ToLower(date)
+
 	layout := &bytes.Buffer{}
 	prefix := getPrefix(s)
 	layout.WriteString(prefix)

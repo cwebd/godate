@@ -50,15 +50,59 @@ func TestDates(t *testing.T) {
 
 		"19890625",
 		"890625",
+
+		"Sunday 25th June 1989",
 	}
 
 	for _, date := range tests {
 		d, err := Parse(date)
 		if err != nil {
-			t.Errorf("Error prasing %q: %v", date, err)
+			t.Errorf("Error parsing %q: %v", date, err)
 		} else if d != correct {
 			t.Errorf("Dates for %q did not match:\n%v (actual)\n%v (expected)", date, d, correct)
 		}
+	}
+
+	// Testing Other Date Ordinals
+
+	// Test st date ordinal
+	correct = time.Date(1989, 8, 1, 0, 0, 0, 0, time.UTC)
+	date := "Tuesday 1st August 1989"
+	d, err := Parse(date)
+	if err != nil {
+		t.Errorf("Error parsing %q: %v", date, err)
+	} else if d != correct {
+		t.Errorf("Dates for %q did not match:\n%v (actual)\n%v (expected)", date, d, correct)
+	}
+
+	// Test nd date ordinal
+	correct = time.Date(1989, 8, 2, 0, 0, 0, 0, time.UTC)
+	date = "Wednesday 2nd August 1989"
+	d, err = Parse(date)
+	if err != nil {
+		t.Errorf("Error parsing %q: %v", date, err)
+	} else if d != correct {
+		t.Errorf("Dates for %q did not match:\n%v (actual)\n%v (expected)", date, d, correct)
+	}
+
+	// Test rd date ordinal
+	correct = time.Date(1989, 8, 3, 0, 0, 0, 0, time.UTC)
+	date = "Wednesday 3rd August 1989"
+	d, err = Parse(date)
+	if err != nil {
+		t.Errorf("Error parsing %q: %v", date, err)
+	} else if d != correct {
+		t.Errorf("Dates for %q did not match:\n%v (actual)\n%v (expected)", date, d, correct)
+	}
+
+	// Test th date ordinal
+	correct = time.Date(1989, 8, 4, 0, 0, 0, 0, time.UTC)
+	date = "Wednesday 4th August 1989"
+	d, err = Parse(date)
+	if err != nil {
+		t.Errorf("Error parsing %q: %v", date, err)
+	} else if d != correct {
+		t.Errorf("Dates for %q did not match:\n%v (actual)\n%v (expected)", date, d, correct)
 	}
 
 	// Just month and year
